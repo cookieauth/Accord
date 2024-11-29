@@ -1,0 +1,50 @@
+<!-- app/templates/review_report.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Review Muster Report</h2>
+<p><strong>Department:</strong> {{ report.department.name }}</p>
+<p><strong>Date:</strong> {{ report.date }}</p>
+<p><strong>Submitted By:</strong> {{ report.submitted_by.username }}</p>
+<p><strong>Status:</strong>
+    {% if report.status == "approved" %}
+        <span class="badge bg-success">Approved</span>
+    {% elif report.status == "rejected" %}
+        <span class="badge bg-danger">Rejected</span>
+    {% else %}
+        <span class="badge bg-warning text-dark">Pending</span>
+    {% endif %}
+</p>
+
+<h4>Personnel Statuses</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Personnel Name</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ps in report.personnel_statuses %}
+        <tr>
+            <td>{{ ps.personnel.name }}</td>
+            <td>{{ ps.status | capitalize }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if report.status == "pending" %}
+<form action="/muster_reports/{{ report.id }}/review" method="post">
+    <div class="mb-3">
+        <label for="status" class="form-label">Change Status</label>
+        <select name="status" id="status" class="form-select" required>
+            <option value="">Select Action</option>
+            <option value="approved">Approve</option>
+            <option value="rejected">Reject</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Review</button>
+</form>
+{% endif %}
+{% endblock %}

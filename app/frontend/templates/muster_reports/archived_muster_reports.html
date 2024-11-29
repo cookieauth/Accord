@@ -1,0 +1,42 @@
+<!-- app/templates/muster_reports/archived_muster_reports.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Archived Muster Reports</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Report ID</th>
+            <th>Department</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Archived At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in archived_reports %}
+        <tr>
+            <td>{{ report.id }}</td>
+            <td>{{ report.department.name }}</td>
+            <td>{{ report.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ report.status }}</td>
+            <td>{{ report.archived_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>
+                <a href="{{ url_for('review_muster_report', report_id=report.id) }}" class="btn btn-info btn-sm">View</a>
+                <form method="post" action="{{ url_for('restore_muster_report', report_id=report.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to restore this report?');">Restore</button>
+                </form>
+                <form method="post" action="{{ url_for('delete_muster_report', report_id=report.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to permanently delete this report?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-center">No archived muster reports found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

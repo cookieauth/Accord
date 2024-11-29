@@ -1,0 +1,39 @@
+<!-- app/templates/muster_reports/pending_reports.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Pending Muster Reports</h2>
+{% if reports %}
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Report ID</th>
+                <th>Department</th>
+                <th>Date</th>
+                <th>Submitted By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.id }}</td>
+                <td>{{ report.department.name }}</td>
+                <td>{{ report.date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ report.submitted_by.username }}</td>
+                <td>
+                    <a href="{{ url_for('review_muster_report', report_id=report.id) }}" class="btn btn-primary btn-sm">Review</a>
+                    <form method="post" action="{{ url_for('archive_muster_report', report_id=report.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to archive this report?');">Archive</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        There are no pending muster reports at the moment.
+    </div>
+{% endif %}
+{% endblock %}

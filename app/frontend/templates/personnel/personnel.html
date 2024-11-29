@@ -1,0 +1,44 @@
+<!-- app/templates/personnel.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Accord | Personnel List</h2>
+    {% if user.role in ["admin", "hr"] %}
+    <a href="/personnel/add" class="btn btn-success">Add Personnel</a>
+    {% endif %}
+</div>
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Location</th>
+            {% if user.role in ["admin", "hr"] %}
+            <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in personnel %}
+        <tr>
+            <td>{{ person.name }}</td>
+            <td>{{ person.department.name }}</td>
+            <td>
+                <span class="badge {% if person.status == 'ACCOUNTED_FOR' %}bg-success{% else %}bg-secondary{% endif %}">
+                    {{ person.status.value | replace('_', ' ') | capitalize }}
+                </span>
+            </td>
+            <td>{{ person.location }}</td>
+            {% if user.role in ["admin", "hr"] %}
+            <td>
+                <a href="/personnel/edit/{{ person.id }}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="/personnel/delete/{{ person.id }}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

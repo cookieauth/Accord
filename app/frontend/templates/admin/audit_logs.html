@@ -1,0 +1,28 @@
+<!-- app/templates/admin/audit_logs.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Accord | Audit Logs</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Action</th>
+            <th>Performed By</th>
+            <th>Timestamp</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in audit_logs %}
+        <tr>
+            <td>{{ log.id }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.performed_by.username if log.performed_by else 'System' }}</td>
+            <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ log.details }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

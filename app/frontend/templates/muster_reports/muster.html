@@ -1,0 +1,30 @@
+<!-- app/templates/muster.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Muster</h2>
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in personnel %}
+        <tr>
+            <td>{{ person.name }}</td>
+            <td>{{ person.department.name }}</td>
+            <td>
+                <span class="badge {% if person.status == 'ACCOUNTED_FOR' %}bg-success{% else %}bg-secondary{% endif %}">
+                    {{ person.status.value | replace('_', ' ') | capitalize }}
+                </span>
+            </td>
+            <td>{{ person.location }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

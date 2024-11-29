@@ -1,0 +1,57 @@
+<!-- app/templates/add_personnel.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Add Personnel</h2>
+<form action="/personnel/add" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+        <div class="invalid-feedback">Please enter the name.</div>
+    </div>
+    <div class="mb-3">
+        <label for="department_id" class="form-label">Department</label>
+        <select id="department_id" name="department_id" class="form-select" required>
+            {% for department in departments %}
+            <option value="{{ department.id }}">{{ department.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">Please select a department.</div>
+    </div>
+    <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" name="status" class="form-select" required>
+            {% for status in statuses %}
+            <option value="{{ status }}">{{ status | replace('_', ' ') | capitalize }}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">Please select a status.</div>
+    </div>
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" id="location" name="location" class="form-control" required>
+        <div class="invalid-feedback">Please enter the location.</div>
+    </div>
+    <button type="submit" class="btn btn-success">Add Personnel</button>
+</form>
+
+<!-- Form Validation Script -->
+<script>
+    // Form validation script (same as in login.html)
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,49 @@
+<!-- app/templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Welcome, {{ user.username }}!</h1>
+<p>Your role: <span class="badge bg-info text-dark">{{ user.role | capitalize }}</span></p>
+
+<div class="row">
+    <!-- Personnel Count Card -->
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Personnel</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ personnel_count }}</h5>
+                <p class="card-text">Total Personnel</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Departments Card (visible to admins and HR) -->
+    {% if user.role in ["admin", "hr"] %}
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+            <div class="card-header">Departments</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ departments | length }}</h5>
+                <p class="card-text">Total Departments</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Placeholder for Additional Cards -->
+    <!-- Add more cards based on user role and required data -->
+</div>
+
+<!-- Quick Access Links -->
+<h2 class="mt-5">Quick Access</h2>
+<div class="list-group">
+    <a href="/muster" class="list-group-item list-group-item-action">Muster/Attendance</a>
+    {% if user.role in ["admin", "hr", "department"] %}
+    <a href="/personnel" class="list-group-item list-group-item-action">Manage Personnel</a>
+    {% endif %}
+    {% if user.role == "admin" %}
+    <a href="/departments" class="list-group-item list-group-item-action">Manage Departments</a>
+    <a href="/admin" class="list-group-item list-group-item-action">Admin Actions</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!-- app/templates/submit_muster.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Submit Muster Report</h2>
+<form action="/muster_reports/submit" method="post">
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" id="date" name="date" class="form-control" required value="{{ today }}">
+    </div>
+    <h4>Personnel Statuses</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Personnel Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in personnel %}
+            <tr>
+                <td>{{ person.name }}</td>
+                <td>
+                    <select name="personnel_statuses-{{ person.id }}" class="form-select" required>
+                        <option value="">Select Status</option>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                        <option value="late">Late</option>
+                        <option value="on_leave">On Leave</option>
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Submit Report</button>
+</form>
+{% endblock %}

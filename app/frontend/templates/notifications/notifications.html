@@ -1,0 +1,37 @@
+<!-- app/templates/notifications/notifications.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Your Notifications</h2>
+
+{% if notifications %}
+    <div class="list-group">
+        {% for notification in notifications %}
+            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if not notification.is_read %}list-group-item-warning{% endif %}">
+                <div>
+                    <p class="mb-1">{{ notification.message }}</p>
+                    <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                </div>
+                <div>
+                    {% if not notification.is_read %}
+                        <form method="post" action="{{ url_for('mark_notification_as_read', notification_id=notification.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">Mark as Read</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{{ url_for('mark_notification_as_unread', notification_id=notification.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-warning">Mark as Unread</button>
+                        </form>
+                    {% endif %}
+                    <form method="post" action="{{ url_for('delete_notification', notification_id=notification.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this notification?');">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        You have no notifications at the moment.
+    </div>
+{% endif %}
+{% endblock %}

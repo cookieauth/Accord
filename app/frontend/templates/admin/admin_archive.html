@@ -1,0 +1,42 @@
+<!-- app/templates/admin_archive.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Archived Muster Reports</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Report ID</th>
+            <th>Department</th>
+            <th>Date</th>
+            <th>Submitted By</th>
+            <th>Status</th>
+            <th>Archived At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.id }}</td>
+            <td>{{ report.department.name }}</td>
+            <td>{{ report.date }}</td>
+            <td>{{ report.submitted_by.username }}</td>
+            <td>
+                {% if report.status == "approved" %}
+                    <span class="badge bg-success">Approved</span>
+                {% elif report.status == "rejected" %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+            </td>
+            <td>{{ report.updated_at }}</td>
+            <td>
+                <a href="/muster_reports/{{ report.id }}" class="btn btn-sm btn-info">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!-- app/templates/hr_review_reports.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Accord | Pending Muster Reports</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Report ID</th>
+            <th>Department</th>
+            <th>Date</th>
+            <th>Submitted By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.id }}</td>
+            <td>{{ report.department.name }}</td>
+            <td>{{ report.date }}</td>
+            <td>{{ report.submitted_by.username }}</td>
+            <td>
+                <a href="/muster_reports/{{ report.id }}/review" class="btn btn-sm btn-success">Review</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

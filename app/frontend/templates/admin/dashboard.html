@@ -1,0 +1,51 @@
+<!-- app/templates/admin/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Accord | Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Users</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ dashboard_data.user_count }}</h5>
+                <p class="card-text">Total Users</p>
+                <a href="{{ url_for('view_users') }}" class="btn btn-light">Manage Users</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Departments</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ dashboard_data.department_count }}</h5>
+                <p class="card-text">Total Departments</p>
+                <a href="{{ url_for('view_departments') }}" class="btn btn-light">Manage Departments</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Personnel</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ dashboard_data.personnel_count }}</h5>
+                <p class="card-text">Total Personnel</p>
+                <a href="{{ url_for('view_personnel') }}" class="btn btn-light">Manage Personnel</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Muster Reports</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ dashboard_data.muster_report_count }}</h5>
+                <p class="card-text">Total Muster Reports</p>
+                <a href="{{ url_for('view_muster_reports') }}" class="btn btn-light">Manage Reports</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add more dashboard widgets as needed -->
+{% endblock %}

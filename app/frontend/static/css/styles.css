@@ -1,0 +1,38 @@
+/* app/static/css/styles.css */
+
+/* Body Styling */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Navbar Styling */
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Card Hover Effect */
+.card:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s;
+}
+
+/* Table Styling */
+.table thead th {
+    vertical-align: middle;
+}
+
+/* Form Styling */
+.needs-validation .form-control:invalid {
+    border-color: #dc3545;
+}
+
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Card Hover Effect */
+.card:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s;
+}

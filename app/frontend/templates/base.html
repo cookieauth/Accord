@@ -1,0 +1,139 @@
+<!-- app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "Dashboard" }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Your custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            {% if user %}
+                {% if user.role == 'admin' %}
+                    <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                {% elif user.role == 'hr' %}
+                    <a class="navbar-brand" href="{{ url_for('hr_dashboard') }}">HR Dashboard</a>
+                {% elif user.role == 'department' %}
+                    <a class="navbar-brand" href="{{ url_for('department_dashboard') }}">Department Dashboard</a>
+                {% else %}
+                    <a class="navbar-brand" href="#">Dashboard</a>
+                {% endif %}
+            {% else %}
+                <a class="navbar-brand" href="#">Accord | Muster Management</a>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Navigation Links Based on User Role -->
+                    {% if user %}
+                        {% if user.role == 'admin' %}
+                            <!-- Admin Dropdown Menu -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('view_users') }}">User Management</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('view_departments') }}">Department Management</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('view_personnel') }}">Personnel Management</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('view_pending_muster_reports') }}">Muster Reports</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                        {% if user.role in ['admin', 'hr'] %}
+                            <!-- HR and Admin Links -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('view_pending_muster_reports') }}">Pending Muster Reports</a>
+                            </li>
+                        {% endif %}
+
+                        {% if user.role == 'department' %}
+                            <!-- Department User Links -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('submit_muster_report') }}">Submit Muster Report</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <!-- User Information and Logout -->
+                <ul class="navbar-nav">
+                    {% if user %}
+                        <!-- Notifications Bell -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="bi bi-bell"></i>
+                                {% set unread_count = user.notifications | selectattr('is_read', 'equalto', False) | list | length %}
+                                {% if unread_count > 0 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ unread_count }}
+                                        <span class="visually-hidden">unread notifications</span>
+                                    </span>
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                                {% for notification in user.notifications[:5] %}
+                                    <li>
+                                        <a class="dropdown-item {% if not notification.is_read %}fw-bold{% endif %}" href="{{ url_for('view_notifications') }}">
+                                            {{ notification.message }}
+                                            <br>
+                                            <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="#">No notifications.</a>
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-center" href="{{ url_for('view_notifications') }}">View all notifications</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <span class="navbar-text text-white me-3">
+                                Logged in as {{ user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Optional: Your custom JS -->
+    <script src="{{ url_for('static', path='js/scripts.js') }}"></script>
+</body>
+</html>
